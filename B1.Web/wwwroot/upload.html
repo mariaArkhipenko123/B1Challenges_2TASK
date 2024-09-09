@@ -1,0 +1,50 @@
+﻿<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Загрузка Excel файла</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+
+        form {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Загрузить Excel файл</h1>
+    <form id="uploadForm" enctype="multipart/form-data">
+        <label for="file">Выберите файл:</label>
+        <input type="file" name="file" accept=".xlsx" required />
+        <button type="submit">Загрузить</button>
+    </form>
+
+    <div id="message"></div>
+
+    <script>
+        document.getElementById('uploadForm').onsubmit = async function (event) {
+            event.preventDefault(); // Предотвращаем стандартное поведение формы
+            const formData = new FormData(this); // Создаем объект FormData с данными формы
+
+            try {
+                const response = await fetch('/reports/upload', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                if (response.ok) {
+                    document.getElementById('message').innerText = 'Файл успешно загружен';
+                } else {
+                    document.getElementById('message').innerText = 'Ошибка при загрузке файла';
+                }
+            } catch (error) {
+                document.getElementById('message').innerText = 'Ошибка: ' + error.message;
+            }
+        };
+    </script>
+</body>
+</html>
